@@ -1,0 +1,104 @@
+----------------------Summary of steps of Map Routing project----------------------
+
+
+problem overview:
+-------------------
+   find the shortest time path from S to D
+   first : walk from S to the first intersection point with 5 km/s
+   second : car from first intersection to last intersection 
+   third : walk from last intersection to D with 5 km/s 
+  ------------------------------------------------------------------------------
+  
+   step 1 : construct the graph : Map.txt
+  ------------------------------
+   read input file : map.txt :
+     1) N: number of intersections "vertices"
+     2) N lines of intersection data (id, x, y)
+     3) M : number of Roads "Edges"
+     4) M lines of M data (id1 , id2, length, speed)
+ 
+   store the intersections in hash map (dictionary)
+   compute the weight of each edge as travel time (length / speed) in hours
+   represent the graph in adjacency list: (key: id1, val: list of tuple(id2, time))
+ ------------------------------------------------------------------------------------
+ 
+    step 2 : Search for Possible Beginning intersection "B" 
+   ------------------------------------------
+    i have (x, y, R) of S  i will compute Euclidian method to each intersection near to S
+      if computed R by Euclidian < R  include it 
+      and finally the min R will be the first intersection i will walk to it from S
+    R = root ((Xs, Ys)sq + (Xi , Yi)sq)   "sq means square or power 2"
+    time = R(min) / 5     "speed of walk = 5 km/s:
+    Best Data Structure: list of tuples (ID, walk_distance, walk_time)
+    Complexity: O(N).
+  -----------------------------------------------------------------------------------
+ 
+    step 3 : Search for Possible Finish intersection "F" 
+   -------------------------------------------
+     the same as step 2 but:
+     i have(x, y, R) of D  i will compute Euclidian method to each intersection near to D
+   ------------------------------------------------------------------------------------
+     
+   step 4: Find the Best Path (Shortest Time)
+   -------------------------------------------
+   Min(total time = walk time from S to B + car time + walk time from F to D)
+   Use Dijkstra super source ... Use a priority queue (min heap)
+   -----------------------------------------------------------------------------------
+  
+   step 5 : Construct the Best-Time Path
+   --------------------------------------
+   Build the path, compute required outputs (intersection IDs, total time, distances)
+   Output Format:
+ 	Line 1: Path IDs(space-separated)
+ 	Line 2: Total time
+ 	Line 3: Total distance
+ 	Line 4: Walking distance
+ 	Line 5: Car distance
+ 	Empty line after each query.
+    
+    Best Data Structure:
+      Path: List of node IDs.
+      Edge List: To look up road lengths for vehicle distance.
+   -----------------------------------------------------------------------------------
+   
+   Step 6: Handle Multiple Queries
+   --------------------------------
+    Read Q from queries file.
+    For each query:
+       Perform Steps 2–5.
+       Write output to file.
+    Measure execution time (excluding I/O) for each query using a stopwatch.
+    Sum query times and add I/O time for total execution time.
+  ----------------------------------------------------------------------------------     
+   
+   Step 7: Measure Execution Time
+   -------------------------------
+   Query time: Start stopwatch after reading query, stop after computing output (exclude I/O).
+   Total time: Include I/O (file reading/writing).
+   Use a library like C#’s Stopwatch or equivalent.
+   ----------------------------------------------------------------------------------
+   
+   
+   Bonuses:
+   ---------
+    Changing - speed handling: Modify edge weights to account for speed intervals (e.g., use minimum time based on speed range).
+    Map Visualization: Use a library like Matplotlib (Python) or a C# graphics library to plot nodes, edges, and the path.
+    Faster Implementation: Use A* algorithm with a heuristic (e.g., Euclidean distance to destination divided by max speed) to reduce complexity below O(|S| |E'| log |V'|).
+  
+ 
+   Meeting Project Requirements
+   -------------------------------
+    Graph Construction: O(| E |), uses adjacency list.
+    Starting/Finishing Nodes: O(N), checks Euclidean distances.
+    Shortest Path: O(| S | | E'| log |V' |), uses Dijkstra’s algorithm.
+    Path Construction: O(| V'|), backtracks predecessors.
+    Output: Matches format(5 lines per query, rounded to 2 decimal places).
+ 
+    Test Cases:
+    ------------
+    Sample: Small graphs(N ≤ 20, M ≤ 50, Q ≤ 10).
+    Medium: N ≤ 20, 000, M ≤ 25, 000, Q ≤ 1, 000.
+    Large: N ≤ 200, 000, M ≤ 250, 000, Q ≤ 1, 000.
+    Efficient data structures ensure scalability.
+ 
+ 
